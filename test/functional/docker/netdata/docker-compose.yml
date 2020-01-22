@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+    netdata:
+        image: netdata/netdata:latest
+        restart: unless-stopped
+        hostname: stats.docker.localhost
+        cap_add:
+            - SYS_PTRACE
+        security_opt:
+            - apparmor:unconfined
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.stats.rule=Host(`stats.docker.localhost`)"
+            - "traefik.http.routers.stats.entrypoints=web"
+            - "traefik.http.services.stats.loadbalancer.server.port=19999"
+            - "traefik.docker.network=infrastructure"
+            - "com.ouroboros.enable=true"
+        volumes:
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+
+networks:
+    default:
+        external:
+            name: infrastructure

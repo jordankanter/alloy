@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+    portainer:
+        image: portainer/portainer:latest
+        restart: unless-stopped
+        hostname: control.docker.localhost
+        command: --templates https://raw.githubusercontent.com/portainer/portainer/develop/templates.json
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - portainer-data:/data
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.control.rule=Host(`control.docker.localhost`)"
+            - "traefik.http.routers.control.entrypoints=web"
+            - "traefik.http.services.control.loadbalancer.server.port=9000"
+            - "traefik.docker.network=infrastructure"
+            - "com.ouroboros.enable=true"
+
+networks:
+    default:
+        external:
+            name: infrastructure
+volumes:
+    portainer-data:
+        external: true

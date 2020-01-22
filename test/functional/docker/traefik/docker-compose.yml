@@ -1,0 +1,22 @@
+version: "3.3"
+
+services:
+    traefik:
+        image: traefik:v2.0
+        container_name: traefik-proxy
+        restart: unless-stopped
+        ports:
+            - "127.0.0.1:80:80"
+            - "127.0.0.1:443:443"
+            - "127.0.0.1:10000:8080"
+        labels:
+            - "com.ouroboros.enable=true"
+        volumes:
+            - ./traefik.toml:/etc/traefik/traefik.toml
+            - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+            - infrastructure
+
+networks:
+    infrastructure:
+        external: true
