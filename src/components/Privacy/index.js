@@ -25,8 +25,10 @@ const validateSetConsentOptions = objectOf({
 const createPrivacy = ({ consent }) => {
   return {
     commands: {
-      setConsent(options) {
-        return consent.setConsent(validateSetConsentOptions(options));
+      setConsent: {
+        run: options => {
+          return consent.setConsent(validateSetConsentOptions(options));
+        }
       }
     },
     lifecycle: {

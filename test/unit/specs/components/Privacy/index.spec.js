@@ -27,7 +27,7 @@ describe("Privacy::index", () => {
 
   describe("setConsent", () => {
     it("notifies consent of consent preferences", () => {
-      const promise = privacy.commands.setConsent({
+      const promise = privacy.commands.setConsent.run({
         general: "in"
       });
 
